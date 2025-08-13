@@ -6,7 +6,9 @@
     "deploy": "wrangler deploy",
     "dev": "wrangler dev",
     "start": "wrangler dev",
-    "cf-typegen": "wrangler types"
+    "cf-typegen": "wrangler types",
+    "test": "jest",
+    "prepare": "husky"
   },
   "dependencies": {
     "chanfana": "^2.6.3",
@@ -14,8 +16,18 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@eslint/js": "^9.33.0",
+    "@types/jest": "^30.0.0",
     "@types/node": "22.13.0",
     "@types/service-worker-mock": "^2.0.4",
+    "eslint": "^9.33.0",
+    "husky": "^9.1.7",
+    "jest": "^30.0.5",
+    "jest-fetch-mock": "^3.0.3",
+    "lint-staged": "^16.1.5",
+    "ts-jest": "^29.4.1",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.39.1",
     "wrangler": "^4.28.1"
   }
 }

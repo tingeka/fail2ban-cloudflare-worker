@@ -22,8 +22,13 @@
 		"types": [
 			"./worker-configuration.d.ts",
 			"@types/node",
-			"@types/service-worker-mock"
-		]
+			"@types/service-worker-mock",
+			"@types/jest"
+		],
+		"baseUrl": ".",
+		"paths": {
+			"@src/*": ["src/*"]
+		}
 	},
 	"exclude": ["node_modules", "dist", "tests"],
 	"include": ["src", "worker-configuration.d.ts"]
