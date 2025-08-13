@@ -1,0 +1,1 @@
+export { SyncActionPost } from "./action-post";

@@ -1,26 +1,18 @@
 import { fromHono } from "chanfana";
 import { Hono } from "hono";
-import { TaskCreate } from "./endpoints/taskCreate";
-import { TaskDelete } from "./endpoints/taskDelete";
-import { TaskFetch } from "./endpoints/taskFetch";
-import { TaskList } from "./endpoints/taskList";
+import type { Env } from "@src/types";
 
-// Start a Hono app
+import { SyncActionPost } from "@src/endpoints/sync";
+
 const app = new Hono<{ Bindings: Env }>();
 
 // Setup OpenAPI registry
 const openapi = fromHono(app, {
-	docs_url: "/",
+  docs_url: "/",
 });
 
-// Register OpenAPI endpoints
-openapi.get("/api/tasks", TaskList);
-openapi.post("/api/tasks", TaskCreate);
-openapi.get("/api/tasks/:taskSlug", TaskFetch);
-openapi.delete("/api/tasks/:taskSlug", TaskDelete);
+// Register your Cloudflare sync endpoint as GET only
+openapi.post("/api/sync", SyncActionPost);
 
-// You may also register routes for non OpenAPI directly on Hono
-// app.get('/test', (c) => c.text('Hono!'))
-
-// Export the Hono app
+// Export the app
 export default app;
