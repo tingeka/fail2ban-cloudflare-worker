@@ -7,7 +7,14 @@
     "dev": "wrangler dev",
     "start": "wrangler dev",
     "cf-typegen": "wrangler types",
-    "test": "jest",
+    "test": "npm run test:unit && npm run test:integration",
+    "test:unit": "jest --config jest-unit.config.js",
+    "test:integration": "jest --config jest-integration.config.js", 
+    "test:e2e": "",
+    "test:all": "npm run test:unit && npm run test:integration && npm run test:e2e",
+    "test:watch": "jest --config jest-unit.config.js --watch",
+    "test:integration:watch": "jest --config jest-integration.config.js --watch",
+    "test:e2e:watch": "",
     "prepare": "husky"
   },
   "dependencies": {

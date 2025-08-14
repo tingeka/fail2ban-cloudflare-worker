@@ -6,6 +6,7 @@ export interface Env {
   [key: `ZONE_ID_${string}`]: string;
   [key: `API_TOKEN_${string}`]: string;
   RULE_NAME: string;
+  LOG_LEVEL: string;
 }
 
 export type AppContext = Context<{ Bindings: Env }>;

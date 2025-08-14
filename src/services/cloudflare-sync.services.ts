@@ -4,9 +4,13 @@ import { BansMap } from "@src/endpoints/sync/types";
 import { ConfigError, DisallowedDomainError } from "@src/lib/throws";
 import { ZodSchema } from "zod";
 import { parseCommaSeparatedList } from "@src/lib/utils";
+import { createLogger } from "@src/lib/logger";
 
 export class CloudflareSyncService {
-  constructor(private env: Env) {}
+    constructor(
+    private env: Env,
+    private log: ReturnType<typeof createLogger>
+  ) {}
 
   private sanitizeKey(domain: string): string {
     if (!domain || domain.trim().length === 0) {
@@ -163,12 +167,12 @@ async syncBans(domain: string, bans: BansMap): Promise<string> {
       throw new ConfigError("missingApiToken");
     }
 
-    console.log(
+    this.log.info(
       `[CloudflareSyncService] Syncing ${Object.keys(bans).length} bans for ${domain}`
     );
 
     const ruleName = this.env.RULE_NAME || "fail2ban";
-    console.log(`[CloudflareSyncService] Using rule name: ${ruleName}`);
+    this.log.info(`[CloudflareSyncService] Using rule name: ${ruleName}`);
 
     const { rulesetId, ruleId: existingRuleId } = await this.getRulesetAndRuleId(
       zoneId,
@@ -179,7 +183,7 @@ async syncBans(domain: string, bans: BansMap): Promise<string> {
     let ruleId = existingRuleId;
 
     if (!ruleId) {
-      console.log(`[CloudflareSyncService] Creating new rule for ${domain}`);
+      this.log.info(`[CloudflareSyncService] Creating new rule for ${domain}`);
       ruleId = await this.createRule(zoneId, rulesetId, apiToken, ruleName);
     }
 

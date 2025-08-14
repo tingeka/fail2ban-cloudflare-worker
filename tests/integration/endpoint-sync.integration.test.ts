@@ -1,12 +1,12 @@
 // tests/endpoint.sync.test.ts
-import { SyncActionPost as syncBans } from "../src/endpoints/sync/action-post";
-import { ApiSuccessResponse, ApiErrorResponse, AppContext } from "../src/types";
-import { mockEnv } from "./env.mock";
-import { BansMap } from "../src/endpoints/sync/types";
+import { SyncActionPost as syncBans } from "../../src/endpoints/sync/action-post";
+import { ApiSuccessResponse, ApiErrorResponse, AppContext } from "../../src/types";
+import { mockEnv } from "../fixtures/env.mock";
+import { BansMap } from "../../src/endpoints/sync/types";
 
 // Mock the service since we test that separately
 const mockSyncBans = jest.fn().mockResolvedValue("Successfully synced 1 IP bans for example.com");
-jest.mock("../src/services/cloudflare-sync.services", () => ({
+jest.mock("../../src/services/cloudflare-sync.services", () => ({
   CloudflareSyncService: jest.fn().mockImplementation(() => ({
     syncBans: mockSyncBans
   }))

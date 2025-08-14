@@ -12,6 +12,7 @@ import { CloudflareSyncService } from "@src/services/cloudflare-sync.services";
 import { ConfigError, DisallowedDomainError, DisallowedIpError } from "@src/lib/throws";
 import { parseCommaSeparatedList } from "@src/lib/utils";
 import { z } from "zod";
+import { createLogger } from "@src/lib/logger";
 
 export class SyncActionPost extends OpenAPIRoute {
   schema = {
@@ -64,6 +65,7 @@ export class SyncActionPost extends OpenAPIRoute {
 
   async handle(c: AppContext) {
     const startTime = Date.now();
+    const log = createLogger(c.env, crypto.randomUUID());
     let domain = "";
     let banCount = 0;
 
@@ -73,31 +75,31 @@ export class SyncActionPost extends OpenAPIRoute {
       domain = requestBody.domain;
       banCount = Object.keys(requestBody.bans).length;
 
-      console.log(`[CloudflareSync] Starting sync for ${domain} with ${banCount} bans`);
+      log.info(`Starting sync for ${domain} with ${banCount} bans`);
 
       if (c.env.ALLOWED_IPS) {
         const callerIp = c.req.header("CF-Connecting-IP") || "unknown";
-        console.log(`[CloudflareSync] Request from IP: ${callerIp}`);
+        log.info(`Request from IP: ${callerIp}`);
 
         const allowedIps = parseCommaSeparatedList(c.env.ALLOWED_IPS);
         if (!allowedIps.includes(callerIp)) {
-          console.warn(`[CloudflareSync] Unauthorized IP ${callerIp} attempted access`);
+          log.warn(`Unauthorized IP ${callerIp} attempted access`);
           throw new DisallowedIpError(callerIp);
         }
       }
 
-      const service = new CloudflareSyncService(c.env);
+      const service = new CloudflareSyncService(c.env, log);
       const message = await service.syncBans(domain, data.body.bans);
 
       const duration = Date.now() - startTime;
-      console.log(`[CloudflareSync] Success for ${domain} in ${duration}ms`);
+      log.info(`Success for ${domain} in ${duration}ms`);
 
       return c.json({ success: true, message, data: data.body.bans });
       
     } catch (error: unknown) {
       const duration = Date.now() - startTime;
-      console.error(
-        `[CloudflareSync] Failed for ${domain} after ${duration}ms:`,
+      log.error(
+        `Failed for ${domain} after ${duration}ms:`,
         (error as Error).message
       );
 

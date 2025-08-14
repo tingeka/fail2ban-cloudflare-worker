@@ -1,5 +1,5 @@
 // tests/types.test.ts
-import { CloudflareSyncSchema } from "../src/endpoints/sync/types";
+import { CloudflareSyncSchema } from "../../src/endpoints/sync/types";
 
 describe("CloudflareSyncSchema schema validation", () => {
   it("should pass with valid data", () => {

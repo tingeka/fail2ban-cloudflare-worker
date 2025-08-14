@@ -1,4 +1,4 @@
-import { Env } from "../src/types";
+import { Env } from "../../src/types";
 
 export const mockEnv: Env = {
 	ALLOWED_DOMAINS: "example.com, another.com",
@@ -8,4 +8,5 @@ export const mockEnv: Env = {
 	API_TOKEN_EXAMPLE_COM: "token-abc",
 	ZONE_ID_ANOTHER_COM: "zoneid-xyz",
 	API_TOKEN_ANOTHER_COM: "token-xyz",
+	LOG_LEVEL: "none", // Set to 'none' to avoid logging in tests
 };
