@@ -65,11 +65,6 @@ export class SyncActionPost extends OpenAPIRoute {
 
   async handle(c: AppContext) {
 
-    console.log("🚀 SyncActionPost handler was called!");
-    console.log("Method:", c.req.method);
-    console.log("Path:", c.req.path);
-    console.log("URL:", c.req.url);
-
     const startTime = Date.now();
     const log = createLogger(c.env, crypto.randomUUID());
     let domain = "";
