@@ -152,7 +152,7 @@ async syncBans(domain: string, bans: BansMap): Promise<string> {
 
     const allowedDomains = parseCommaSeparatedList(this.env.ALLOWED_DOMAINS);
     if (!allowedDomains.includes(domain)) {
-      throw new DisallowedDomainError(domain);
+      throw new DisallowedDomainError(`${domain} (current domains: ${this.env.ALLOWED_DOMAINS}`);
     }
 
     const safeDomain = this.sanitizeKey(domain);
