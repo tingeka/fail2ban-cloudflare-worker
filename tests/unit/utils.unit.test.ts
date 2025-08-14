@@ -17,5 +17,10 @@ describe("Utils Unit Tests", () => {
     it("should handle empty string", () => {
       expect(parseCommaSeparatedList("")).toEqual([]);
     });
+
+    it("should handle undefined input", () => {
+      expect(parseCommaSeparatedList(undefined)).toEqual([]);
+    });
+
   });
 });
