@@ -24,7 +24,7 @@ export function createLogger(env: { LOG_LEVEL?: string }, requestId?: string) {
       level,
       requestId,
       msg: args.map(a =>
-        typeof a === "object" ? a : String(a)
+        typeof a === "object" ? JSON.stringify(a) : String(a)
       ),
     };
 
