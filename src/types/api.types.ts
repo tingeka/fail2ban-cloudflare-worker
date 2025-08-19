@@ -1,27 +1,24 @@
+// src/types/api.types.ts
 import { z } from "zod";
 
+// The request schema still works well as a generic, so we can keep it.
 export const ApiRequestSchema = <T extends z.ZodTypeAny>(bodySchema: T) =>
   z.object({ body: bodySchema });
 
-export const ApiSuccessResponseSchema = <T extends z.ZodTypeAny>(dataSchema: T) =>
-  z.object({
-    success: z.literal(true),
-    message: z.string(),
-    data: dataSchema.optional(),
-  });
-
-export const ApiErrorResponseSchema = z.object({
-  success: z.literal(false),
+// We define a base for the API success/error responses.
+const BaseApiResponseSchema = z.object({
   message: z.string(),
 });
 
-export type ApiSuccessResponse<T> = {
-  success: true;
-  message: string;
-  data?: T;
-};
+export const ApiSuccessResponseSchema = BaseApiResponseSchema.extend({
+  success: z.literal(true),
+});
 
-export type ApiErrorResponse = {
-  success: false;
-  message: string;
-};
+export const ApiErrorResponseSchema = BaseApiResponseSchema.extend({
+  success: z.literal(false),
+});
+
+// Now we can create the type aliases. For the success response, we'll
+// define a new type that includes the generic data field. This is the cleanest approach.
+export type ApiSuccessResponse<TData> = z.infer<typeof ApiSuccessResponseSchema> & { data?: TData };
+export type ApiErrorResponse = z.infer<typeof ApiErrorResponseSchema>;

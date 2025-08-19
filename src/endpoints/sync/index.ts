@@ -1,1 +1,1 @@
-export { SyncActionPost } from "./action-post";
+export { SyncPostAction } from "./sync.post";

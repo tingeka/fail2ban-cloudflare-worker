@@ -2,7 +2,7 @@ import { fromHono } from "chanfana";
 import { Hono } from "hono";
 import type { Env } from "@src/types";
 
-import { SyncActionPost } from "@src/endpoints/sync";
+import { SyncPostAction } from "@src/endpoints/sync";
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -12,7 +12,7 @@ const openapi = fromHono(app, {
 });
 
 // Register your Cloudflare sync endpoint as GET only
-openapi.post("/api/sync", SyncActionPost);
+openapi.post("/api/sync", SyncPostAction);
 
 
 // Export the app
