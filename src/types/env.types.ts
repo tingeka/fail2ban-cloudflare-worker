@@ -5,7 +5,7 @@ export interface Env {
   ALLOWED_IPS?: string;
   [key: `ZONE_ID_${string}`]: string;
   [key: `API_TOKEN_${string}`]: string;
-  RULE_NAME: string;
+  RULE_NAME?: string;
   LOG_LEVEL: string;
 }
 
