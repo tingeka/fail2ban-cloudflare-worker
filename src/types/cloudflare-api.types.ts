@@ -1,3 +1,4 @@
+// src/types/cloudflare-api.types.ts
 import { z } from "zod";
 
 export const CloudflareMessageSchema = z.object({
@@ -5,45 +6,33 @@ export const CloudflareMessageSchema = z.object({
   code: z.number().optional(),
   source: z.object({ pointer: z.string() }).optional(),
 });
-export type CloudflareMessage = z.infer<typeof CloudflareMessageSchema>;
 
-export const CloudflareAPISuccessResponseSchema = <T extends z.ZodTypeAny>(
-  resultSchema: T
-) =>
-  z.object({
-    success: z.literal(true),
-    errors: z.array(CloudflareMessageSchema),
-    messages: z.array(CloudflareMessageSchema),
-    result: resultSchema,
-  });
+export const CloudflareAPISuccessResponseSchema = z.object({
+  success: z.literal(true),
+  errors: z.array(CloudflareMessageSchema),
+  messages: z.array(CloudflareMessageSchema),
+});
 
-export const CloudflareAPIErrorResponseSchema = <T extends z.ZodTypeAny>(
-  resultSchema: T
-) =>
-  z.object({
-    success: z.literal(false),
-    errors: z.array(CloudflareMessageSchema),
-    messages: z.array(CloudflareMessageSchema),
-    result: resultSchema,
-  });
+export const CloudflareAPIErrorResponseSchema = z.object({
+  success: z.literal(false),
+  errors: z.array(CloudflareMessageSchema),
+  messages: z.array(CloudflareMessageSchema),
+});
 
-export type CloudflareAPIResponse<T, S extends boolean = boolean> = {
-  success: S;
-  errors: CloudflareMessage[];
-  messages: CloudflareMessage[];
-  result: T;
-};
-
-const RuleSchema = z.object({
+export const RuleSchema = z.object({
   id: z.string(),
   description: z.string(),
 }).passthrough();
 
-export const RulesetResponseSchema = CloudflareAPISuccessResponseSchema(
-  z.object({
-    id: z.string(),
-    rules: z.array(RuleSchema),
-  })
-);
+export const RulesetResultSchema = z.object({
+  id: z.string(),
+  rules: z.array(RuleSchema),
+});
 
+export const RulesetResponseSchema = CloudflareAPISuccessResponseSchema.extend({
+  result: RulesetResultSchema,
+});
+
+// We use z.infer to create a single, definitive type alias for the result.
+export type RulesetResult = z.infer<typeof RulesetResultSchema>;
 export type RulesetResponse = z.infer<typeof RulesetResponseSchema>;
